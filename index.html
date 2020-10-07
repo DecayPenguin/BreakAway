@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link rel="stylesheet" href="./style.css" />
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+    <link rel="stylesheet" href="./pages/mainStyle.css" />
 </head>
 
 <body>
@@ -30,7 +31,7 @@
                         <div class="input-field col s6">
                             <form action="#">
                                 <div class="file-field input-field">
-                                    <div class="btn">
+                                    <div class="btn" id="searchBtn">
                                         <span>Let's see what's around you!</span>
                                         <input type="text" multiple>
                                     </div>
@@ -46,7 +47,7 @@
         <div class="col s12 m4">
             <div class="card">
                 <div class="card-image">
-                    <img src="images/sample-1.jpg">
+                    <!-- <img src="https://via.placeholder.com/50"> -->
                     <span class="card-title">Card Title</span>
                 </div>
                 <div class="card-content">
@@ -61,7 +62,7 @@
         <div class="col s12 m4">
             <div class="card">
                 <div class="card-image">
-                    <img src="images/sample-1.jpg">
+                    <!-- <img src="https://via.placeholder.com/50"> -->
                     <span class="card-title">Card Title</span>
                 </div>
                 <div class="card-content">
@@ -76,7 +77,7 @@
         <div class="col s12 m4">
             <div class="card">
                 <div class="card-image">
-                    <img src="images/sample-1.jpg">
+                    <!-- <img src="https://via.placeholder.com/50"> -->
                     <span class="card-title">Card Title</span>
                 </div>
                 <div class="card-content">
@@ -92,13 +93,16 @@
     <div class="row">
         <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-                <img class="activator canter" src="images/office.jpg">
+                <!-- <img class="activator canter" src="https://via.placeholder.com/50"> -->
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">Place Holder Image
                 </div>
             </div>
         </div>
     </div>
+    <div id="map" style="width: 800px; height: 530px;"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/mainScript.js"></script>
 </body>
 
 </html>
