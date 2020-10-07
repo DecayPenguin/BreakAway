@@ -1,5 +1,9 @@
 //#region Variable Declaration
-var mapAPI = "unkzycjA9xXArcgGZJ9TVYqGAI33F8OD";
+var googleAPI = "AIzaSyBQzrf9jwhfQltXdobXsZKttRNHZeURN34";
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JpbW1lZGV2IiwiYSI6ImNrZnk3amV0ajI4ZW0yeG84dzBlN2E5NmoifQ.YXham7g6fMpxpJLDX0eZyA';
+let map;
+let service;
+let infowindow;
 // L.mapquest.key = mapAPI;
 var lat = 0;
 var long = 0;
@@ -10,66 +14,44 @@ var searchFor = "";
 
 //#region Function Definitions
 
-// Converts user entry into lat/long coordinates
-function getGeo(search) {
-    queryURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapAPI}&location=${search}`;
+function geoCode(search) {
+    queryURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${search}&key=${googleAPI}`;
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function (result) {
-        // console.log(result);
-        lat = result.results[0].locations[0].displayLatLng.lat;
-        long = result.results[0].locations[0].displayLatLng.lng;
-        console.log(lat);
-        console.log(long);
-
-        dispMap(lat, long);
+    }).then(function (getGeo) {
+        console.log(getGeo);
+        lat = getGeo.results[0].geometry.location.lat;
+        long = getGeo.results[0].geometry.location.lng;
+        console.log("Coords: " + lat + ", " + long);
+        initMap(lat, long);
     })
-};
+}
 
-// Displays map from lat/long coordinates
-function dispMap(lat, long) {
-    L.mapquest.key = 'KEY';
-
-    var map = L.mapquest.map('map', {
-        center: [lat, long],
-        layers: L.mapquest.tileLayer('map'),
-        zoom: 12
+function initMap(lat, long) {
+    const myLocation = new google.maps.LatLng(lat, long);
+    infowindow = new google.maps.InfoWindow();
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: myLocation,
+        zoom: 15,
     });
 
-    map.addControl(L.mapquest.control());
-    map.addControl(L.mapquest.geocodingControl({
-        position: 'topleft'
-    }));
-    searchMap(lat, long, searchFor);
-};
+    var marker = new google.maps.Marker({position: myLocation, map: map});
+    // const request = {
+    //     query: "Museum of Contemporary Art Australia",
+    //     fields: ["name", "geometry"],
+    // };
+    // service = new google.maps.places.PlacesService(map);
+    // service.findPlaceFromQuery(request, (results, status) => {
+    //     if (status === google.maps.places.PlacesServiceStatus.OK) {
+    //         for (let i = 0; i < results.length; i++) {
+    //             createMarker(results[i]);
+    //         }
+    //         map.setCenter(results[0].geometry.location);
+    //     }
+    // });
+}
 
-function searchMap(search, searchFor) {
-
-
-    // creates results page
-    //https://www.mapquestapi.com/search/v2/radius?
-    //origin=Denver,+CO
-    //&radius=0.15&maxMatches=3
-    //&ambiguities=ignore
-    //&hostedData=mqap.ntpois|group_sic_code=?|581208&outFormat=json&key=KEY
-
-    // searchFor may need to be hardcoded to properly use MapQuest's API
-    // link to sic_code: https://developer.mapquest.com/documentation/search-api/v2/points-of-interest/#sic-codes
-    searchFor = 581208;
-    queryURL = `http://www.mapquestapi.com/search/v2/radius?origin=${search},
-    &radius=10&maxMatches=10&ambiguities=ignore&hostedData=mqap.ntpois|group_sic_code=?|${searchFor}&outFormat=json&key=${mapAPI}`;
-
-    // queryURL = `http://www.mapquestapi.com/search/v2/radius?key=${mapAPI}&maxMatches=20&origin=${lat},${long}`;
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
-    });
-
-
-};
 
 //#endregion
 
@@ -81,7 +63,10 @@ $("#searchBtn").click(function () {
         console.log("Type something in the area");
     else {
         search = $(".validate").val();
-        getGeo(search);
+        // console.log(search);
+        // getGeo(search);
+        // generateMap(search);
+        geoCode(search);
     }
 })
 //#endregion
