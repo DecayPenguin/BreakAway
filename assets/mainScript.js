@@ -3,7 +3,6 @@ var googleAPI = "AIzaSyBQzrf9jwhfQltXdobXsZKttRNHZeURN34";
 let map;
 let service;
 let infowindow;
-// L.mapquest.key = mapAPI;
 var lat = 0;
 var long = 0;
 var search = "";
@@ -55,6 +54,7 @@ function initMap(lat, long) {
     });
 
     searchType();
+    //#region OldCode
     // Displays marker on current location
     // var marker = new google.maps.Marker({position: myLocation, map: map});
 
@@ -107,11 +107,10 @@ function initMap(lat, long) {
     // });
     // // console.log(searchFor);
     // $("#pac-input").val(searchFor);
+    //#endregion
 }
 
 function searchType() {
-    // console.log(searchFor);
-    $("#pac-input").val(searchFor);
     const input = document.getElementById("pac-input");
     const searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -159,6 +158,12 @@ function searchType() {
         })
         map.fitBounds(bounds);
     });
+    editSearch();
+}
+
+function editSearch() {
+    // console.log(searchFor);
+    $("#pac-input").val(searchFor);
 }
 
 // creates a marker on each result created from the searchArea function
@@ -187,7 +192,8 @@ function selectionBtn() {
         activeBTN.addClass("hide");
         foodBTN.addClass("hide");
         // hard coding of search selection
-        searchFor = "Movie Theaters";
+        // searchFor = "Movie Theaters";
+        // will use TicketMaster API
         addressEnter();
     }
     else {
@@ -204,7 +210,7 @@ function addressEnter() {
     // search button to be targeted later
     var element = $(`
         <div class="row">
-            <div class="col s6">
+            <div class="col l3 m6 s12">
                 <div class="valign-center">
                     <input type="text" id="searchLocation" placeholder="Enter your address or Zipcode">
                     <button class="waves-effect waves-light btn-small" id="searchBTN">
