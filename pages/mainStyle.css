@@ -18,13 +18,17 @@ nav {
 }
 
 #buttonsArea{
+    
+    
     padding-top: 30px;
     padding-bottom: 50px;
+    
 }
 
 
 #active{
     color:#090A0A;
+    
     border-radius: 60px;
     background: #3fb0ac;
     box-shadow: inset -24px -24px 48px #369794,  
@@ -33,16 +37,19 @@ nav {
 
 #entertain{
     color:rgb(63, 66, 54);
+    
     border-radius: 60px;
-background: #fae596;
-box-shadow: inset -24px -24px 48px #d7c581, 
+    background: #fae596;
+    box-shadow: inset -24px -24px 48px #d7c581, 
             inset 24px 24px 48px #ffffab;
 }
 
 #wineDine{
     color:#090A0A;
+    
+    
     border-radius: 60px;
-background: #9b8798;
-box-shadow: inset -24px -24px 48px #857483, 
+    background: #9b8798;
+    box-shadow: inset -24px -24px 48px #857483, 
             inset 24px 24px 48px #b19aad;
 }
