@@ -53,64 +53,11 @@ function initMap(lat, long) {
         zoom: 15,
     });
 
-    searchType();
+    // searchType();
     //#region OldCode
     // Displays marker on current location
-    // var marker = new google.maps.Marker({position: myLocation, map: map});
+    var marker = new google.maps.Marker({position: myLocation, map: map});
 
-    // const input = document.getElementById("pac-input");
-    // const searchBox = new google.maps.places.SearchBox(input);
-    // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    // map.addListener("bounds_changed", () => {
-    //     searchBox.setBounds(map.getBounds());
-    // })
-    // searchBox.addListener("places_changed", () => {
-    //     const places = searchBox.getPlaces();
-
-    //     if (places.length == 0) {
-    //         return;
-    //     }
-    //     console.log(places);
-    //     markers.forEach((marker) => {
-    //         marker.setMap(null);
-    //     });
-    //     markers = [];
-    //     const bounds = new google.maps.LatLngBounds();
-    //     places.forEach((place) => {
-    //         if (!place.geometry) {
-    //             console.log("Returned place contains no geometry");
-    //             return;
-    //         }
-    //         const icon = {
-    //             url: place.icon,
-    //             size: new google.maps.Size(71, 71),
-    //             origin: new google.maps.Point(0, 0),
-    //             anchor: new google.maps.Point(17, 34),
-    //             scaledSize: new google.maps.Size(25, 25)
-    //         };
-    //         markers.push(
-    //             new google.maps.Marker({
-    //                 map,
-    //                 icon,
-    //                 title: place.name,
-    //                 position: place.geometry.location
-    //             })
-    //         )
-    //         if (place.geometry.viewport) {
-    //             bounds.union(place.geometry.viewport);
-    //         }
-    //         else {
-    //             bounds.extend(place.geometry.location);
-    //         }
-    //     })
-    //     map.fitBounds(bounds);
-    // });
-    // // console.log(searchFor);
-    // $("#pac-input").val(searchFor);
-    //#endregion
-}
-
-function searchType() {
     const input = document.getElementById("pac-input");
     const searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -158,12 +105,9 @@ function searchType() {
         })
         map.fitBounds(bounds);
     });
-    editSearch();
-}
-
-function editSearch() {
     // console.log(searchFor);
     $("#pac-input").val(searchFor);
+    //#endregion
 }
 
 // creates a marker on each result created from the searchArea function
