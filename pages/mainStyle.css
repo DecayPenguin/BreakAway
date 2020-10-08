@@ -7,7 +7,6 @@ body{
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    
 }
 
 .buttonChoice{
@@ -19,7 +18,6 @@ nav {
 }
 
 #buttonsArea{
-
     padding-top: 30px;
     padding-bottom: 50px;
 }
