@@ -8,24 +8,42 @@ var foodBTN = $("#wineDine");
 
 //#region Function Definitions
 function selectionBtn() {
-    console.log(this);
+    // console.log(this);
     if ($(this).attr("id") == "active") {
         entertainBTN.addClass("hide");
         foodBTN.addClass("hide");
+        addressEnter();
     }
     else if ($(this).attr("id") == "entertain") {
         activeBTN.addClass("hide");
         foodBTN.addClass("hide");
-    }
-    else if ($(this).attr("id") == "wineDine") {
-        activeBTN.addClass("hide");
-        entertainBTN.addClass("hide");
+        addressEnter();
     }
     else {
-        activeBTN.removeClass("hide");
-        entertainBTN.removeClass("hide");
-        foodBTN.removeClass("hide");
+        activeBTN.addClass("hide");
+        entertainBTN.addClass("hide");
+        addressEnter();
     }
+}
+
+function addressEnter() {
+    // var el = $("<div class='row'><div class='valign-center'");
+    // var input = $("<input type='text'>")
+    // $("body").append(el);
+    // // console.log("div added");
+    // $(el).append(input);
+    // // console.log("input added");
+    var element = $(`
+        <div class="row">
+            <div class="col s6">
+                <div class="valign-center">
+                    <input type="text" placeholder="Enter your address or Zipcode">
+                </div>
+            </div>   
+        </div>    
+    `);
+    $(".container").append(element);
+
 }
 
 
@@ -34,6 +52,6 @@ function selectionBtn() {
 //#endregion
 
 //#region Event Listeners
-$(document).on("click", "button", selectionBtn);
+$(document).one("click", "button", selectionBtn);
 
 //#endregion
