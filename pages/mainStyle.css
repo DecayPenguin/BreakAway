@@ -9,26 +9,26 @@ body{
     background-size: cover;
 }
 
-.buttonChoice{
-    margin-top: 12px;
-}
+
+
 nav {
     color: rgb(63, 66, 54);
     background-color: rgb(106, 188, 192);
 }
 
 #buttonsArea{
-    
-    
-    padding-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 50px;
     padding-bottom: 50px;
-    
 }
 
 
 #active{
     color:#090A0A;
-    
     border-radius: 60px;
     background: #3fb0ac;
     box-shadow: inset -24px -24px 48px #369794,  
@@ -37,7 +37,6 @@ nav {
 
 #entertain{
     color:rgb(63, 66, 54);
-    
     border-radius: 60px;
     background: #fae596;
     box-shadow: inset -24px -24px 48px #d7c581, 
@@ -46,8 +45,6 @@ nav {
 
 #wineDine{
     color:#090A0A;
-    
-    
     border-radius: 60px;
     background: #9b8798;
     box-shadow: inset -24px -24px 48px #857483, 
