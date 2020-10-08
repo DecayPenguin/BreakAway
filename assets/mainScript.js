@@ -16,10 +16,18 @@ $(document).ready(function () {
     // create code to transfer to HTML
     // create code to put the results of zipcode location in list 
 
+// onclick of a button that is taking the value the input field (zipcode), then need to pass that value(zipcode) into Function getEvents -- input class="file-path validate" from "lets see what around you"
+$("#entertainBTN").on("click",function(){
+    var zipCode = $(".validate").val()
+    getEvents(zipCode);
+})    
 
+function getEvents(zipCode) {
+        
+    
     var APIKey = "AGUitf4l225OIMq7fGj5l5i6EKPcppiE"
 
-    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=10&postalCode=78741&apikey=" + APIKey
+    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=10&postalCode=" + zipCode + "&apikey=" + APIKey;
     // - this will change to lat&lon or so that what every is put in form is inserted i.e.:
     // var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=10&postalCode=" + (whatusertypedinform) + "&apikey=" + APIKey
     // then make AJAX call
@@ -31,6 +39,9 @@ $(document).ready(function () {
         success: function (results) {
 
             console.log(results);
+
+            //insert for loop here to cycle thru the results
+            
             // Parse the response.
             // Do other things.
             $(".eventName").text("Event: " + results._embedded.events[0].name);
@@ -49,5 +60,6 @@ $(document).ready(function () {
              // Transfer content to HTML
        
     });
-
+    }
+    //Don't delete 56 or 58
 });
