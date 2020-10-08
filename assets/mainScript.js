@@ -93,27 +93,6 @@ function initMap(lat, long) {
     })
 }
 
-// function for finding a type of result using Google Places API
-// function searchArea(request) {
-//     console.log(request);
-
-//     requestOBJ = {
-//         query: request,
-//         fields: ["name", "geometry"]
-//     }
-//     map = new google.maps.Map(document.getElementById("map"));
-//     service = new google.maps.places.PlacesService(map);
-//     service.findPlaceFromQuery(requestOBJ, (results, status) => {
-//         if (status === google.maps.places.PlacesServiceStatus.OK) {
-//             for (let i = 0; i < results.length; i++) {
-//                 createMarker(results[i]);
-//             }
-//             map.setCenter(results[0].geometry.location);
-//         }
-//         console.log(results);
-//     });
-// }
-
 // creates a marker on each result created from the searchArea function
 function createMarker(place) {
     const marker = new google.maps.Marker({
