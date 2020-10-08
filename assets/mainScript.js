@@ -41,8 +41,15 @@ function geoCode(search) {
 function initMap(lat, long) {
     // Appens a map element and search box to the resultStorage to display a map and searchbox inputs
     var element = $(`
-        <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
-        <div id = 'map' style = 'width: 600px; height: 500px;'></div>
+        <div class="row">
+            <div class="col s12">
+                <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
+                <div id = 'map' style = 'width: 600px; height: 500px;'></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 resultsList"></div>
+        </div>
     `);
     resultStorage.append(element);
 
@@ -56,7 +63,7 @@ function initMap(lat, long) {
     // searchType();
     //#region OldCode
     // Displays marker on current location
-    var marker = new google.maps.Marker({position: myLocation, map: map});
+    var marker = new google.maps.Marker({ position: myLocation, map: map });
 
     const input = document.getElementById("pac-input");
     const searchBox = new google.maps.places.SearchBox(input);
@@ -71,6 +78,18 @@ function initMap(lat, long) {
             return;
         }
         console.log(places);
+        // for loop printing out each result
+        $(".resultsList").empty();
+        for (var i = 0; i < places.length; i++) {
+            // console.log(i);
+            if (places[i].business_status == "OPERATIONAL") {
+                var element = $(`
+                    <div><strong>${places[i].name}</strong></div>
+                    <address>${places[i].formatted_address}</address>
+                `)
+                $(".resultsList").append(element);
+            }
+        }
         markers.forEach((marker) => {
             marker.setMap(null);
         });
