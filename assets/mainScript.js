@@ -1,10 +1,8 @@
 //#region Variable Declaration
 var googleAPI = "AIzaSyBQzrf9jwhfQltXdobXsZKttRNHZeURN34";
-mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JpbW1lZGV2IiwiYSI6ImNrZnk3amV0ajI4ZW0yeG84dzBlN2E5NmoifQ.YXham7g6fMpxpJLDX0eZyA';
 let map;
 let service;
 let infowindow;
-// L.mapquest.key = mapAPI;
 var lat = 0;
 var long = 0;
 var search = "";
@@ -14,6 +12,7 @@ let markers = [];
 var activeBTN = $("#active");
 var entertainBTN = $("#entertain");
 var foodBTN = $("#wineDine");
+var resultStorage = $(".resultStorage");
 
 //#endregion
 
@@ -21,6 +20,8 @@ var foodBTN = $("#wineDine");
 
 // reverse lookup for lat/long of address or zipcode user gives the application
 function geoCode(search) {
+    search = $("#searchLocation").val();
+    // console.log("in geoCode, search for: " + search);
     queryURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${search}&key=${googleAPI}`;
     $.ajax({
         url: queryURL,
@@ -38,6 +39,20 @@ function geoCode(search) {
 
 // Displays map based on the getGeo result from the function geoCode
 function initMap(lat, long) {
+    // Appens a map element and search box to the resultStorage to display a map and searchbox inputs
+    var element = $(`
+        <div class="row">
+            <div class="col s12">
+                <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
+                <div id = 'map' style = 'width: 600px; height: 500px;'></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 resultsList"></div>
+        </div>
+    `);
+    resultStorage.append(element);
+
     const myLocation = new google.maps.LatLng(lat, long);
     infowindow = new google.maps.InfoWindow();
     map = new google.maps.Map(document.getElementById("map"), {
@@ -45,8 +60,10 @@ function initMap(lat, long) {
         zoom: 15,
     });
 
+    // searchType();
+    //#region OldCode
     // Displays marker on current location
-    // var marker = new google.maps.Marker({position: myLocation, map: map});
+    var marker = new google.maps.Marker({ position: myLocation, map: map });
 
     const input = document.getElementById("pac-input");
     const searchBox = new google.maps.places.SearchBox(input);
@@ -61,6 +78,18 @@ function initMap(lat, long) {
             return;
         }
         console.log(places);
+        // for loop printing out each result
+        $(".resultsList").empty();
+        for (var i = 0; i < places.length; i++) {
+            // console.log(i);
+            if (places[i].business_status == "OPERATIONAL") {
+                var element = $(`
+                    <div><strong>${places[i].name}</strong></div>
+                    <address>${places[i].formatted_address}</address>
+                `)
+                $(".resultsList").append(element);
+            }
+        }
         markers.forEach((marker) => {
             marker.setMap(null);
         });
@@ -94,7 +123,10 @@ function initMap(lat, long) {
             }
         })
         map.fitBounds(bounds);
-    })
+    });
+    // console.log(searchFor);
+    $("#pac-input").val(searchFor);
+    //#endregion
 }
 
 // creates a marker on each result created from the searchArea function
@@ -110,42 +142,49 @@ function createMarker(place) {
 }
 
 function selectionBtn() {
-    // console.log(this);
+    // compares which of the 3 buttons were selected, then hides the two NOT selected
     if ($(this).attr("id") == "active") {
         entertainBTN.addClass("hide");
         foodBTN.addClass("hide");
+        // hard coding of search selection
+        searchFor = "Parks";
+        // call to allow the user to input an address or zipcode
         addressEnter();
     }
     else if ($(this).attr("id") == "entertain") {
         activeBTN.addClass("hide");
         foodBTN.addClass("hide");
+        // hard coding of search selection
+        // searchFor = "Movie Theaters";
+        // will use TicketMaster API
         addressEnter();
     }
     else {
         activeBTN.addClass("hide");
         entertainBTN.addClass("hide");
+        // hard coding of search selectioFn
+        searchFor = "Restaraunts";
         addressEnter();
     }
 }
 
 function addressEnter() {
-    // var el = $("<div class='row'><div class='valign-center'");
-    // var input = $("<input type='text'>")
-    // $("body").append(el);
-    // // console.log("div added");
-    // $(el).append(input);
-    // // console.log("input added");
+    // Generated element containing a text input for zip/address and a search button
+    // search button to be targeted later
     var element = $(`
         <div class="row">
-            <div class="col s6">
+            <div class="col l3 m6 s12">
                 <div class="valign-center">
-                    <input type="text" placeholder="Enter your address or Zipcode">
+                    <input type="text" id="searchLocation" placeholder="Enter your address or Zipcode">
+                    <button class="waves-effect waves-light btn-small" id="searchBTN">
+                    <i class="small material-icons">search</i></button>
                 </div>
             </div>   
         </div>    
     `);
-    $(".container").append(element);
-
+    $(".bottom").append(element);
+    // console.log("elements made");
+    $("#searchBTN").one("click", geoCode);
 }
 
 //#endregion
