@@ -11,6 +11,10 @@ var search = "";
 var searchFor = "";
 let markers = [];
 
+var activeBTN = $("#active");
+var entertainBTN = $("#entertain");
+var foodBTN = $("#wineDine");
+
 //#endregion
 
 //#region Function Definitions
@@ -105,25 +109,47 @@ function createMarker(place) {
     })
 }
 
+function selectionBtn() {
+    // console.log(this);
+    if ($(this).attr("id") == "active") {
+        entertainBTN.addClass("hide");
+        foodBTN.addClass("hide");
+        addressEnter();
+    }
+    else if ($(this).attr("id") == "entertain") {
+        activeBTN.addClass("hide");
+        foodBTN.addClass("hide");
+        addressEnter();
+    }
+    else {
+        activeBTN.addClass("hide");
+        entertainBTN.addClass("hide");
+        addressEnter();
+    }
+}
+
+function addressEnter() {
+    // var el = $("<div class='row'><div class='valign-center'");
+    // var input = $("<input type='text'>")
+    // $("body").append(el);
+    // // console.log("div added");
+    // $(el).append(input);
+    // // console.log("input added");
+    var element = $(`
+        <div class="row">
+            <div class="col s6">
+                <div class="valign-center">
+                    <input type="text" placeholder="Enter your address or Zipcode">
+                </div>
+            </div>   
+        </div>    
+    `);
+    $(".container").append(element);
+
+}
 
 //#endregion
 
-
 //#region Event Listeners
-$("#searchBtn").click(function () {
-    // console.log(this);
-    if ($(".validate").val() == "")
-        console.log("Type something in the area");
-    else {
-        search = $(".validate").val();
-        // console.log(search);
-        // getGeo(search);
-        // generateMap(search);
-        geoCode(search);
-
-        // testing purposes: hardcoded search item
-        // searchFor = "Food";
-        // searchArea(searchFor);
-    }
-})
+$(document).one("click", "button", selectionBtn);
 //#endregion
