@@ -3,7 +3,6 @@ var googleAPI = "AIzaSyBQzrf9jwhfQltXdobXsZKttRNHZeURN34";
 let map;
 let service;
 let infowindow;
-// L.mapquest.key = mapAPI;
 var lat = 0;
 var long = 0;
 var search = "";
@@ -42,8 +41,15 @@ function geoCode(search) {
 function initMap(lat, long) {
     // Appens a map element and search box to the resultStorage to display a map and searchbox inputs
     var element = $(`
-        <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
-        <div id = 'map' style = 'width: 600px; height: 500px;'></div>
+        <div class="row">
+            <div class="col s12">
+                <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
+                <div id = 'map' style = 'width: 600px; height: 500px;'></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 resultsList"></div>
+        </div>
     `);
     resultStorage.append(element);
 
@@ -54,64 +60,11 @@ function initMap(lat, long) {
         zoom: 15,
     });
 
-    searchType();
+    // searchType();
+    //#region OldCode
     // Displays marker on current location
-    // var marker = new google.maps.Marker({position: myLocation, map: map});
+    var marker = new google.maps.Marker({ position: myLocation, map: map });
 
-    // const input = document.getElementById("pac-input");
-    // const searchBox = new google.maps.places.SearchBox(input);
-    // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    // map.addListener("bounds_changed", () => {
-    //     searchBox.setBounds(map.getBounds());
-    // })
-    // searchBox.addListener("places_changed", () => {
-    //     const places = searchBox.getPlaces();
-
-    //     if (places.length == 0) {
-    //         return;
-    //     }
-    //     console.log(places);
-    //     markers.forEach((marker) => {
-    //         marker.setMap(null);
-    //     });
-    //     markers = [];
-    //     const bounds = new google.maps.LatLngBounds();
-    //     places.forEach((place) => {
-    //         if (!place.geometry) {
-    //             console.log("Returned place contains no geometry");
-    //             return;
-    //         }
-    //         const icon = {
-    //             url: place.icon,
-    //             size: new google.maps.Size(71, 71),
-    //             origin: new google.maps.Point(0, 0),
-    //             anchor: new google.maps.Point(17, 34),
-    //             scaledSize: new google.maps.Size(25, 25)
-    //         };
-    //         markers.push(
-    //             new google.maps.Marker({
-    //                 map,
-    //                 icon,
-    //                 title: place.name,
-    //                 position: place.geometry.location
-    //             })
-    //         )
-    //         if (place.geometry.viewport) {
-    //             bounds.union(place.geometry.viewport);
-    //         }
-    //         else {
-    //             bounds.extend(place.geometry.location);
-    //         }
-    //     })
-    //     map.fitBounds(bounds);
-    // });
-    // // console.log(searchFor);
-    // $("#pac-input").val(searchFor);
-}
-
-function searchType() {
-    // console.log(searchFor);
-    $("#pac-input").val(searchFor);
     const input = document.getElementById("pac-input");
     const searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -125,6 +78,18 @@ function searchType() {
             return;
         }
         console.log(places);
+        // for loop printing out each result
+        $(".resultsList").empty();
+        for (var i = 0; i < places.length; i++) {
+            // console.log(i);
+            if (places[i].business_status == "OPERATIONAL") {
+                var element = $(`
+                    <div><strong>${places[i].name}</strong></div>
+                    <address>${places[i].formatted_address}</address>
+                `)
+                $(".resultsList").append(element);
+            }
+        }
         markers.forEach((marker) => {
             marker.setMap(null);
         });
@@ -159,6 +124,9 @@ function searchType() {
         })
         map.fitBounds(bounds);
     });
+    // console.log(searchFor);
+    $("#pac-input").val(searchFor);
+    //#endregion
 }
 
 // creates a marker on each result created from the searchArea function
@@ -187,7 +155,8 @@ function selectionBtn() {
         activeBTN.addClass("hide");
         foodBTN.addClass("hide");
         // hard coding of search selection
-        searchFor = "Movie Theaters";
+        // searchFor = "Movie Theaters";
+        // will use TicketMaster API
         addressEnter();
     }
     else {
@@ -204,7 +173,7 @@ function addressEnter() {
     // search button to be targeted later
     var element = $(`
         <div class="row">
-            <div class="col s6">
+            <div class="col l3 m6 s12">
                 <div class="valign-center">
                     <input type="text" id="searchLocation" placeholder="Enter your address or Zipcode">
                     <button class="waves-effect waves-light btn-small" id="searchBTN">
