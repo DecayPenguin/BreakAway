@@ -9,6 +9,7 @@ var lat = 0;
 var long = 0;
 var search = "";
 var searchFor = "";
+let markers = [];
 
 //#endregion
 
@@ -42,28 +43,76 @@ function initMap(lat, long) {
 
     // Displays marker on current location
     // var marker = new google.maps.Marker({position: myLocation, map: map});
+
+    const input = document.getElementById("pac-input");
+    const searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds());
+    })
+    searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+            return;
+        }
+        console.log(places);
+        markers.forEach((marker) => {
+            marker.setMap(null);
+        });
+        markers = [];
+        const bounds = new google.maps.LatLngBounds();
+        places.forEach((place) => {
+            if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+            const icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+            markers.push(
+                new google.maps.Marker({
+                    map,
+                    icon,
+                    title: place.name,
+                    position: place.geometry.location
+                })
+            )
+            if (place.geometry.viewport) {
+                bounds.union(place.geometry.viewport);
+            }
+            else {
+                bounds.extend(place.geometry.location);
+            }
+        })
+        map.fitBounds(bounds);
+    })
 }
 
 // function for finding a type of result using Google Places API
-function searchArea(request) {
-    console.log(request);
-    
-    requestOBJ = {
-        query: request,
-        fields: ["name", "geometry"]
-    }
-    map = new google.maps.Map(document.getElementById("map"));
-    service = new google.maps.places.PlacesService(map);
-    service.findPlaceFromQuery(requestOBJ, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (let i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-            }
-            map.setCenter(results[0].geometry.location);
-        }
-        console.log(results);
-    });
-}
+// function searchArea(request) {
+//     console.log(request);
+
+//     requestOBJ = {
+//         query: request,
+//         fields: ["name", "geometry"]
+//     }
+//     map = new google.maps.Map(document.getElementById("map"));
+//     service = new google.maps.places.PlacesService(map);
+//     service.findPlaceFromQuery(requestOBJ, (results, status) => {
+//         if (status === google.maps.places.PlacesServiceStatus.OK) {
+//             for (let i = 0; i < results.length; i++) {
+//                 createMarker(results[i]);
+//             }
+//             map.setCenter(results[0].geometry.location);
+//         }
+//         console.log(results);
+//     });
+// }
 
 // creates a marker on each result created from the searchArea function
 function createMarker(place) {
@@ -94,8 +143,8 @@ $("#searchBtn").click(function () {
         geoCode(search);
 
         // testing purposes: hardcoded search item
-        searchFor = "Food";
-        searchArea(searchFor);
+        // searchFor = "Food";
+        // searchArea(searchFor);
     }
 })
 //#endregion
