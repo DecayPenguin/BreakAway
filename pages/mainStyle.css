@@ -1,3 +1,46 @@
+body{
+    background-image: url(./Ambient-Vignette-Background-Blue-Yellow.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    
+}
+
 .buttonChoice{
     margin-top: 12px;
+}
+nav {
+    color: rgb(63, 66, 54);
+    background-color: rgb(106, 188, 192);
+}
+
+#buttonsArea{
+
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+
+
+#active{
+    color:#090A0A;
+    border-radius: 60px;
+    background: #3fb0ac;
+    box-shadow: inset -24px -24px 48px #369794,  
+                inset 24px 24px 48px #48c9c4;
+}
+
+#entertain{
+    color:rgb(63, 66, 54);
+    border-radius: 60px;
+background: #fae596;
+box-shadow: inset -24px -24px 48px #d7c581, 
+            inset 24px 24px 48px #ffffab;
+}
+
+#wineDine{
+    color:#090A0A;
+    border-radius: 60px;
+background: #9b8798;
+box-shadow: inset -24px -24px 48px #857483, 
+            inset 24px 24px 48px #b19aad;
 }
