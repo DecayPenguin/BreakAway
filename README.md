@@ -17,7 +17,7 @@ JQuery, JavaScript, HTML, Materialize CSS, Google API and TicketMaster API
 
 
 #### Example Images:
-![Example of the Homepage]()
-![Example of the Results]()
+![Example of the Homepage](assets/images/homepageExample.png)
+![Example of the Results](assets/images/resultsExample.png)
 #### Deployed Site:
-<a href="#">link text</a>
+<a href="https://grimmedev.github.io/BreakAway/">BreakAway</a>
