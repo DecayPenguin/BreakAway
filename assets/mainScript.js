@@ -5,6 +5,7 @@ let service;
 let infowindow;
 var lat = 0;
 var long = 0;
+var zipCode = 0;
 var search = "";
 var searchFor = "";
 let markers = [];
@@ -31,24 +32,35 @@ function geoCode(search) {
         // converts result getGeo into variable lat/long for use elsewhere
         lat = getGeo.results[0].geometry.location.lat;
         long = getGeo.results[0].geometry.location.lng;
+        var tempStorage = getGeo.results[0].formatted_address.split(" ");
+        zipCode = tempStorage[2].slice(0, -1);
+        // console.log(zipCode);
         // console.log("Coords: " + lat + ", " + long);
         // calls map to be displayed
-        initMap(lat, long);
+        if (searchFor == "Entertainment") {
+            getEvents();
+        }
+        else {
+            initMap(lat, long);
+        }
     })
 }
 
 // Displays map based on the getGeo result from the function geoCode
 function initMap(lat, long) {
+    // deletes anything to be displayed above the map
+    $(".bottom").empty();
     // Appens a map element and search box to the resultStorage to display a map and searchbox inputs
     var element = $(`
         <div class="row">
             <div class="col s12">
+                <p>Click the result search bar and tap the text again to perform the search</p>
                 <input id="pac-input" class="controls" type="text" placeholder="Search For..."/>
                 <div id = 'map' style = 'width: 600px; height: 500px;'></div>
             </div>
         </div>
         <div class="row">
-            <div class="col s12 resultsList"></div>
+            <div class="col s12 resultsList" id="events"></div>
         </div>
     `);
     resultStorage.append(element);
@@ -155,7 +167,7 @@ function selectionBtn() {
         activeBTN.addClass("hide");
         foodBTN.addClass("hide");
         // hard coding of search selection
-        // searchFor = "Movie Theaters";
+        searchFor = "Entertainment";
         // will use TicketMaster API
         addressEnter();
     }
@@ -186,23 +198,12 @@ function addressEnter() {
     // console.log("elements made");
     $("#searchBTN").one("click", geoCode);
 }
-//Button/Form stuff:
-//We grab information entered in textbox or form(address or zipcode ect)
-//Button will trigger AJAX call
-//We get the text from the input form for the URL
-//Makes the URL with data from form and api key
-//AJAX - API stuff
-// items needed: APIKey, URLquery
-// then make AJAX call
-// create code to log the queryURL
-// Create code to log resulting object
-// create code to transfer to HTML
-// create code to put the results of zipcode location in list 
+
 function getEvents() {
     var APIKey = "AGUitf4l225OIMq7fGj5l5i6EKPcppiE";
+    // var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=20&postalCode=" + zipCode + "&apikey=" + APIKey;
+    var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?size=10&postalCode=${zipCode}&apikey=${APIKey}`;
     // var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=10&postalCode=" + zipCode + "&apikey=" + APIKey;
-    var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?size=10&latlong=${long},${lat}&apikey=${APIKey}`
-    // - this will change to lat&lon or so that what every is put in form is inserted i.e.:
     // then make AJAX call
     $.ajax({
         type: "GET",
@@ -212,54 +213,32 @@ function getEvents() {
         success: function (results) {
 
             console.log(results);
-        }
-    }).then(function (results) {
-        var events = results.value;
-
-        for (var i = 0; i < results._embedded.length; i++) {
-
-            // Deleting the event buttons prior to adding new event buttons
-            // (this is necessary otherwise we will have repeat buttons)
-            $("#events-view").empty();
-
-            // Looping through the array of events
-            for (var i = 0; i < events.length; i++) {
-
-
-                var a = $("<div>");
-                // Adding a class
-                a.addClass("eventResults");
-                // Adding a data-attribute with a value of the event at index i
-                a.attr("data-name", events[i]);
-                // Providing the button's text with a value of the event at index i
-                a.text(events[i]);
-                // Adding the button to the HTML
-                $("#events-view").append(a);
+            if (results.page.totalElements == 0 || results.page.totalPages == 0) {
+                console.log("No events");
             }
+            else {
+                initMap(lat, long);
+                var events = results._embedded.events;
+                console.log(events);
+                // Deleting the event buttons prior to adding new event buttons
+                // (this is necessary otherwise we will have repeat buttons)
+                $(".resultsList").empty();
+                // Looping through the array of events
+                for (var i = 0; i < events.length; i++) {
+                    var eventAddress = events[i]._embedded.venues[0].address.line1 + ", " + events[i]._embedded.venues[0].city.name + ", " + events[i]._embedded.venues[0].postalCode;
+                    var element = $(`
+                            <div><strong>${events[i].name}</strong></div>
+                            <address>${eventAddress}</address>
+                        `);
+                    $(".resultsList").append(element);
+                }
+            }
+        },
+        error: function () {
+            console.log("Error");
         }
-
-        // Parse the response.
-        // Do other things.
-        //dynamically created an element inside of the for loop; and append the element to our results container
-        $(".eventName").text("Event: " + results._embedded.events[0].name);
-        $(".venueName").text("Venue: " + results._embedded.events[0]._embedded.venues[0].name);
-        $(".date").text("When: " + results._embedded.events[0].dates.start.dateTime);
-        //will need to convert "dateTime" to human english
-
-        // Log the data in the console as well
-        console.log("Event: " + results._embedded.events[0].name);
-        console.log("Venue: " + results._embedded.events[0]._embedded.venues[0].name);
-        console.log("When: " + results._embedded.events[0].dates.start.dateTime);
-
-
-        // Transfer content to HTML
-
-
     });
-    //Don't delete 56 or 58
-
 };
-
 //#endregion
 
 //#region Event Listeners
